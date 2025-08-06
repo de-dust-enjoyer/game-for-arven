@@ -26,7 +26,10 @@ class Level:
 		self.kill_tiles = pygame.sprite.Group()
 		self.camera_group = CameraGroup([self.all_tiles, self.objects])
 		self.ui_group = pygame.sprite.Group()
-		
+
+		# chunking
+		self.chunk_size = 64
+		self.chunked_tiles = {} # {(chunk_x, chunk_y): [Tile, Tile, Tile ...]}
 
 		self.checkpoints = {}
 
@@ -40,27 +43,31 @@ class Level:
 		for layer in tmx_data.visible_layers:
 			if isinstance(layer, pytmx.TiledTileLayer): # if layer is a tilelayer (not an object layer)
 				for x, y, gid in layer:
-					if layer.name == "collision_floor":
-						tile_img = tmx_data.get_tile_image_by_gid(gid)
-						if tile_img:
-							tile = Tile((x * self.tilesize[0],y * self.tilesize[1]), tile_img, "collision_tile")
-							self.collision_tiles.add(tile)
-							self.all_tiles.add(tile)
-					elif layer.name == "kill_tiles":
-						tile_img = tmx_data.get_tile_image_by_gid(gid)
-						if tile_img:
-							tile = Tile((x * self.tilesize[0],y * self.tilesize[1]), tile_img, "kill_tile")
-							self.kill_tiles.add(tile)
-							self.all_tiles.add(tile)
-					elif layer.name == "non_collision_floor":
-						tile_img = tmx_data.get_tile_image_by_gid(gid)
-						if tile_img:
-							tile = Tile((x * self.tilesize[0],y * self.tilesize[1]), tile_img, "non_collision_tile")
-							self.all_tiles.add(tile)
+					tile_img = tmx_data.get_tile_image_by_gid(gid)
+					if not tile_img:
+						continue
+
+					pos = (x * self.tilesize[0], y * self.tilesize[1])
+					tile = Tile(pos, tile_img, layer.name)
+
+					self.all_tiles.add(tile)
+					if layer.name == "collision_tile":
+						self.collision_tiles.add(tile)
+					elif layer.name == "kill_tile":
+						self.kill_tiles.add(tile)
+
+					# chunking
+
+					chunk_x = pos[0] // self.chunk_size
+					chunk_y = pos[1] // self.chunk_size
+					chunk_key = (chunk_x, chunk_y)
+					self.chunked_tiles.setdefault(chunk_key, []).append(tile)
+
+
 			elif isinstance(layer, pytmx.TiledObjectGroup):
 				for obj in layer:
 					if layer.name == "player":
-						player = Player((obj.x, obj.y), self.collision_tiles, self.ui_group, self.kill_tiles, self.checkpoints)
+						player = Player((obj.x, obj.y), self.chunked_tiles, self.chunk_size, self.ui_group, self.checkpoints)
 						self.player = player
 						self.camera_group.set_target(self.player, player=True)
 						hair_big = Hair(player, pygame.image.load(join("assets", "player", "hair_big.png")).convert_alpha())
@@ -72,7 +79,7 @@ class Level:
 
 
 					elif layer.name == "npc":
-						npc = NPC((obj.x, obj.y), self.collision_tiles, obj.name, player, self.camera_group, self.ui_group)
+						npc = NPC((obj.x, obj.y), self.chunked_tiles, self.chunk_size, obj.name, player, self.camera_group, self.ui_group)
 						self.objects.add(npc)
 
 					elif layer.name == "checkpoints":

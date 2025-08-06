@@ -5,8 +5,8 @@ from os.path import join
 from dialog_box import DialogBox
 
 class NPC(Player):
-	def __init__(self, starting_pos, collision_group, id:str, player:Player, camera_group:pygame.sprite.Group, ui_group: pygame.sprite.Group):
-		super().__init__(starting_pos, collision_group, ui_group, pygame.sprite.Group(), {})
+	def __init__(self, starting_pos, chunk_dict:dict, chunk_size:int, id:str, player:Player, camera_group:pygame.sprite.Group, ui_group: pygame.sprite.Group):
+		super().__init__(starting_pos, chunk_dict, chunk_size, ui_group, {})
 		self.id = id
 		animations:dict = {
 			"idle" : pygame.image.load(join("assets", "npc", self.id, "idle.png")).convert_alpha(),

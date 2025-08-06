@@ -7,7 +7,7 @@ from dialog_box import DialogBox
 
 
 class Player(pygame.sprite.Sprite):
-	def __init__(self, starting_pos:pygame.math.Vector2, collision_group:pygame.sprite.Group, ui_group, kill_tiles, checkpoints:dict):
+	def __init__(self, starting_pos:pygame.math.Vector2, chunk_dict:dict, chunk_size:int, ui_group, checkpoints:dict):
 		super().__init__()
 		self.checkpoints = checkpoints
 		self.spawn_pos = starting_pos
@@ -28,8 +28,10 @@ class Player(pygame.sprite.Sprite):
 		self.collision_rect.midbottom = self.rect.midbottom
 		self.old_rect = self.collision_rect.copy() # for collision direction
 		self.position = pygame.math.Vector2(self.rect.topleft)
-		self.collision_group = collision_group
-		self.kill_tiles = kill_tiles
+
+		self.chunk_dict = chunk_dict
+		self.chunk_size = chunk_size
+
 		#movement vars:
 		self.speed:float = 1.5
 		self.max_velocity_y = 8
@@ -164,8 +166,10 @@ class Player(pygame.sprite.Sprite):
 		if direction == "horizontal":
 			self.is_on_left_wall = False
 			self.is_on_right_wall = False
-		for sprite in self.collision_group:
-			if self.collision_rect.colliderect(sprite.rect):
+
+		nearby_tiles = self.get_nearby_tiles(self.collision_rect.center, self.chunk_dict, self.chunk_size)
+		for sprite in nearby_tiles:
+			if self.collision_rect.colliderect(sprite.rect) and sprite.id == "collision_tile":
 				if direction == "vertical":
 					if self.collision_rect.bottom > sprite.rect.top and self.old_rect.bottom <= sprite.rect.top:
 						# player is on floor
@@ -192,13 +196,25 @@ class Player(pygame.sprite.Sprite):
 						self.velocity.x = 0
 						self.is_on_right_wall = True
 		# kill player if hit spikes
-		for sprite in self.kill_tiles:
-			if self.collision_rect.colliderect(sprite.collision_rect):
+			elif self.collision_rect.colliderect(sprite.rect) and sprite.id == "kill_tile":
+				
 				self.die()
+
 
 		# update the position variable
 		self.rect.midbottom = self.collision_rect.midbottom
 		self.position = pygame.math.Vector2(self.collision_rect.topleft)
+
+	def get_nearby_tiles(self, player_pos, chunk_dict, chunk_size, radius_in_chunks=1):
+		print(player_pos)
+		chunk_x = int(player_pos[0] // chunk_size)
+		chunk_y = int(player_pos[1] // chunk_size)
+		nearby_tiles = []
+		for dx in range(-radius_in_chunks, radius_in_chunks +1):
+			for dy in range(-radius_in_chunks, radius_in_chunks +1):
+				key = (chunk_x + dx, chunk_y + dy)
+				nearby_tiles.extend(chunk_dict.get(key, []))
+		return nearby_tiles
 
 
 
