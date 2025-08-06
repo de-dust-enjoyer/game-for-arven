@@ -6,6 +6,7 @@ from tile import Tile
 from camera import CameraGroup
 from hair import Hair
 from npc import NPC
+from flag import Flag
 
 class Level:
 	def __init__(self, screen, game_state_manager):
@@ -83,7 +84,11 @@ class Level:
 						self.objects.add(npc)
 
 					elif layer.name == "checkpoints":
-						self.checkpoints[obj.name] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
+						if obj.type == "checkpoint":
+							self.checkpoints[obj.name] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)	
+						elif obj.type == "flag":
+							flag = Flag(self.checkpoints, obj.name, (obj.x, obj.y))
+							self.objects.add(flag)					
 
 
 	def run(self):
