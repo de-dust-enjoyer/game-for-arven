@@ -41,8 +41,10 @@ class CameraGroup(pygame.sprite.Group):
 		self.camera_rect.size = (visible_w, visible_h)
 
 		self.sprites_drawn = 0
-		self.camera_surf.fill("lightblue")
-
+		if self.offset.y < 350:
+			self.camera_surf.fill("lightblue")
+		else:
+			self.camera_surf.fill((36,21,39))
 		center_pos = self.camera_rect.center
 		nearby_tiles = get_nearby_tiles(center_pos, self.chunk_dict, self.chunk_size, 2)
 
@@ -54,12 +56,11 @@ class CameraGroup(pygame.sprite.Group):
 
 		for group in self.groups:
 			for sprite in group:
-				if isinstance(sprite, Player):
-					if not sprite.dead:
-						sprite_pos = pygame.Vector2(sprite.rect.topleft)
-						adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
-						self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
-						self.sprites_drawn += 1
+				if not sprite.dead:
+					sprite_pos = pygame.Vector2(sprite.rect.topleft)
+					adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
+					self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
+					self.sprites_drawn += 1
 
 		self.display_surf.blit(self.camera_surf, (0, 0))
 
