@@ -4,7 +4,6 @@ from player import Player
 from os.path import join
 from tile import Tile
 from camera import CameraGroup
-from debugInfo import DebugInfo
 from hair import Hair
 from npc import NPC
 
@@ -20,9 +19,6 @@ class Level:
 		self.tilesize:tuple = (8,8)
 
 
-		# fonts
-		self.debug_font = pygame.font.Font(join("assets", "font", "pixel_font.otf"), 10)
-
 		# groups:
 		self.objects = pygame.sprite.Group()
 		self.all_tiles = pygame.sprite.Group()
@@ -30,7 +26,7 @@ class Level:
 		self.kill_tiles = pygame.sprite.Group()
 		self.camera_group = CameraGroup([self.all_tiles, self.objects])
 		self.ui_group = pygame.sprite.Group()
-		self.debug_info = DebugInfo(self.debug_font)
+		
 
 		self.checkpoints = {}
 
@@ -103,14 +99,8 @@ class Level:
 		# game logic:
 		self.objects.update()
 		self.ui_group.update()
-		for obj in self.objects:
-			if obj.id == "player":
-				self.debug_info.add("player vel: ", obj.velocity)
-				self.debug_info.add("jump timer: ", obj.jump_delay_timer.time_left())
-		self.debug_info.add("sprites drawn: ", self.camera_group.sprites_drawn)
 		# rendering:
 		self.screen.fill("black")
 		self.camera_group.custom_draw()
 		self.ui_group.draw(self.screen)
-		self.debug_info.render(self.screen)
 		

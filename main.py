@@ -3,6 +3,7 @@ import pygame
 from game_state_manager import GameStateManager
 from level import Level
 from menu import Menu
+from debugInfo import DebugInfo
 
 class Game:
 	def __init__(self):
@@ -20,6 +21,8 @@ class Game:
 		self.level = Level(self.screen, self.game_state_manager)
 
 		self.states = {"level": self.level, "menu": self.menu}
+
+		self.debug_info = DebugInfo(pygame.font.Font("assets/font/pixel_font.otf", 10))
 						
 
 
@@ -28,7 +31,9 @@ class Game:
 			self.clock.tick(self.fps)
 
 			self.states[self.game_state_manager.get_state()].run()
+			self.debug_info.add("fps: " ,self.clock.get_fps())
 
+			self.debug_info.render(self.screen)
 			pygame.display.flip()
 					
 
