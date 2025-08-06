@@ -62,7 +62,6 @@ class Player(pygame.sprite.Sprite):
 			self.collision_rect.center = self.spawn_pos
 			self.position = pygame.Vector2(self.collision_rect.topleft)
 			self.dead = False
-		print(self.checkpoints)
 		self.image = self.animation_player.update()
 		self.move()
 		self.handle_checkpoints()
