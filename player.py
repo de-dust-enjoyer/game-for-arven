@@ -169,34 +169,34 @@ class Player(pygame.sprite.Sprite):
 
 		nearby_tiles = self.get_nearby_tiles(self.collision_rect.center, self.chunk_dict, self.chunk_size)
 		for sprite in nearby_tiles:
-			if self.collision_rect.colliderect(sprite.rect) and sprite.id == "collision_tile":
+			if self.collision_rect.colliderect(sprite.collision_rect) and sprite.id == "collision_tile":
 				if direction == "vertical":
-					if self.collision_rect.bottom > sprite.rect.top and self.old_rect.bottom <= sprite.rect.top:
+					if self.collision_rect.bottom > sprite.collision_rect.top and self.old_rect.bottom <= sprite.collision_rect.top:
 						# player is on floor
-						self.collision_rect.bottom = sprite.rect.top
+						self.collision_rect.bottom = sprite.collision_rect.top
 						self.is_on_floor = True
 						self.velocity.y = 0
 						self.downforce = 0
 						self.has_jump = True
 
-					elif self.collision_rect.top < sprite.rect.bottom and self.old_rect.top >= sprite.rect.bottom:
+					elif self.collision_rect.top < sprite.collision_rect.bottom and self.old_rect.top >= sprite.collision_rect.bottom:
 						# player is on ceiling
-						self.collision_rect.top = sprite.rect.bottom
+						self.collision_rect.top = sprite.collision_rect.bottom
 						self.velocity.y = 0
 
 				elif direction == "horizontal":
-					if self.collision_rect.left < sprite.rect.right and self.old_rect.left >= sprite.rect.right:
+					if self.collision_rect.left < sprite.collision_rect.right and self.old_rect.left >= sprite.collision_rect.right:
 						# player has a wall to his left
-						self.collision_rect.left = sprite.rect.right
+						self.collision_rect.left = sprite.collision_rect.right
 						self.velocity.x = 0
 						self.is_on_left_wall = True
-					elif self.collision_rect.right > sprite.rect.left and self.old_rect.right <= sprite.rect.left:
+					elif self.collision_rect.right > sprite.collision_rect.left and self.old_rect.right <= sprite.collision_rect.left:
 						# player has a wall to his right
 						self.collision_rect.right = sprite.rect.left
 						self.velocity.x = 0
 						self.is_on_right_wall = True
 		# kill player if hit spikes
-			elif self.collision_rect.colliderect(sprite.rect) and sprite.id == "kill_tile":
+			elif self.collision_rect.colliderect(sprite.collision_rect) and sprite.id == "kill_tile":
 				
 				self.die()
 
