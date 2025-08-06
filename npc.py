@@ -42,7 +42,8 @@ class NPC(Player):
 		self.interaction_box = pygame.Rect((self.rect.topleft), (60, 60))
 		self.interaction_box.center = self.collision_rect.center
 
-		self.target:pygame.Vector2 = pygame.Vector2(self.player.collision_rect.center)
+		self.target:pygame.Vector2 = None
+		self.look_target = None
 		self.speed = 0.5
 		self.allowed_to_move = True
 
@@ -66,6 +67,8 @@ class NPC(Player):
 			self.velocity.x = 0
 			self.collision_rect.topleft = self.position
 
+		
+
 		self.handle_collisions("horizontal")
 
 
@@ -75,10 +78,18 @@ class NPC(Player):
 		self.velocity.y = min(self.max_velocity_y, self.velocity.y)
 		self.position.y += self.velocity.y
 		self.collision_rect.top = self.position.y
+
 		self.handle_collisions("vertical")
 
 		# animation
-		self.flip_h = True if self.velocity.x <= 0 else False
+		if not self.look_target:
+			self.flip_h = True if self.velocity.x <= 0 else False
+		else:
+			if self.collision_rect.centerx < self.look_target.collision_rect.centerx:
+				self.flip_h = False
+			else:
+				self.flip_h = True
+
 		if self.velocity.x:
 			self.animation_player.play("run")
 		else:
@@ -86,6 +97,12 @@ class NPC(Player):
 
 	def goto(self, pos:pygame.Vector2):
 		self.target = pos
+
+	def look_at(self, target):
+		self.look_target = target
+
+	def stop_look_at(self):
+		self.look_target = None
 
 	def play_dialog(self):
 		if len(self.ui_group) == 0:
@@ -101,6 +118,8 @@ class NPC(Player):
 			self.stop()
 			self.camera_group.set_target(self)
 			self.play_dialog()
+			self.look_at(self.player)
+
 		elif len(self.dialog) == 0:
 
 			self.player.start()

@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
 		}
 		self.animation_player:AnimationPlayer = AnimationPlayer(animations, 10)
 		self.image = self.animation_player.update()
-		self.rect = self.image.get_frect(center = self.spawn_pos)
+		self.rect = self.image.get_frect(topleft = self.spawn_pos)
 		self.collision_rect = self.rect.copy()
 		self.collision_rect.size = (self.rect.width - 4, self.rect.height - 2)
 		self.collision_rect.midbottom = self.rect.midbottom
@@ -197,8 +197,7 @@ class Player(pygame.sprite.Sprite):
 						self.velocity.x = 0
 						self.is_on_right_wall = True
 		# kill player if hit spikes
-			elif self.collision_rect.colliderect(sprite.collision_rect) and sprite.id == "kill_tile":
-				
+			elif self.collision_rect.colliderect(sprite.collision_rect) and sprite.id == "kill_tile" and self.id == "player":
 				self.die()
 
 

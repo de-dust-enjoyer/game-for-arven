@@ -12,7 +12,7 @@ class CameraGroup(pygame.sprite.Group):
 		self.groups = groups
 		self.zoom:int = 6
 		self.zoom_center = pygame.math.Vector2(self.display_surf.get_size()) / 2
-		self.offset:pygame.math.Vector2 = pygame.math.Vector2(0,200)
+		self.offset:pygame.math.Vector2 = pygame.math.Vector2(100,250)
 
 		self.velocity = pygame.Vector2(0, 0)
 		self.camera_smoothing = 20
