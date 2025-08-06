@@ -1,9 +1,10 @@
 import pygame
 from timer import Timer
 from chunking import get_nearby_tiles
+from player import Player
 
 class CameraGroup(pygame.sprite.Group):
-	def __init__(self, groups:list):
+	def __init__(self, groups:list, chunk_dict:dict, chunk_size:int):
 		super().__init__()
 		self.display_surf = pygame.display.get_surface()
 		self.camera_surf = pygame.surface.Surface(self.display_surf.get_size(), pygame.SRCALPHA).convert_alpha()
@@ -22,6 +23,9 @@ class CameraGroup(pygame.sprite.Group):
 
 		self.temp_target_timer = Timer(5)
 
+		self.chunk_dict = chunk_dict
+		self.chunk_size = chunk_size
+
 
 		#optimizing
 		self.sprites_drawn = 0
@@ -39,19 +43,21 @@ class CameraGroup(pygame.sprite.Group):
 		self.sprites_drawn = 0
 		self.camera_surf.fill("lightblue")
 
+		center_pos = self.camera_rect.center
+		nearby_tiles = get_nearby_tiles(center_pos, self.chunk_dict, self.chunk_size, 2)
+
+		for sprite in nearby_tiles:
+			sprite_pos = pygame.Vector2(sprite.rect.topleft)
+			adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
+			self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
+			self.sprites_drawn += 1
+
 		for group in self.groups:
 			for sprite in group:
-				if sprite.rect.colliderect(self.camera_rect) and sprite.id != "player" and sprite.id != "hair":
-					sprite_pos = pygame.Vector2(sprite.rect.topleft)
-					adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
-
-					self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
-					self.sprites_drawn += 1
-				elif sprite.id == "player" or sprite.id == "hair":
+				if isinstance(sprite, Player):
 					if not sprite.dead:
 						sprite_pos = pygame.Vector2(sprite.rect.topleft)
 						adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
-
 						self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
 						self.sprites_drawn += 1
 

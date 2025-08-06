@@ -18,18 +18,18 @@ class Level:
 
 		self.tilesize:tuple = (8,8)
 
+		# chunking
+		self.chunk_size = 64
+		self.chunked_tiles = {} # {(chunk_x, chunk_y): [Tile, Tile, Tile ...]}
 
 		# groups:
 		self.objects = pygame.sprite.Group()
 		self.all_tiles = pygame.sprite.Group()
 		self.collision_tiles = pygame.sprite.Group()
 		self.kill_tiles = pygame.sprite.Group()
-		self.camera_group = CameraGroup([self.all_tiles, self.objects])
+		self.camera_group = CameraGroup([self.objects], self.chunked_tiles, self.chunk_size)
 		self.ui_group = pygame.sprite.Group()
 
-		# chunking
-		self.chunk_size = 64
-		self.chunked_tiles = {} # {(chunk_x, chunk_y): [Tile, Tile, Tile ...]}
 
 		self.checkpoints = {}
 
