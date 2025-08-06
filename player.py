@@ -206,7 +206,6 @@ class Player(pygame.sprite.Sprite):
 		self.position = pygame.math.Vector2(self.collision_rect.topleft)
 
 	def get_nearby_tiles(self, player_pos, chunk_dict, chunk_size, radius_in_chunks=1):
-		print(player_pos)
 		chunk_x = int(player_pos[0] // chunk_size)
 		chunk_y = int(player_pos[1] // chunk_size)
 		nearby_tiles = []
