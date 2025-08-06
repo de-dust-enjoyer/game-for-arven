@@ -3,6 +3,7 @@ from os.path import join
 from animation_player import AnimationPlayer
 from timer import Timer
 from dialog_box import DialogBox
+from chunking import get_nearby_tiles
 
 
 
@@ -167,7 +168,7 @@ class Player(pygame.sprite.Sprite):
 			self.is_on_left_wall = False
 			self.is_on_right_wall = False
 
-		nearby_tiles = self.get_nearby_tiles(self.collision_rect.center, self.chunk_dict, self.chunk_size)
+		nearby_tiles = get_nearby_tiles(self.collision_rect.center, self.chunk_dict, self.chunk_size)
 		for sprite in nearby_tiles:
 			if self.collision_rect.colliderect(sprite.collision_rect) and sprite.id == "collision_tile":
 				if direction == "vertical":
@@ -205,15 +206,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect.midbottom = self.collision_rect.midbottom
 		self.position = pygame.math.Vector2(self.collision_rect.topleft)
 
-	def get_nearby_tiles(self, player_pos, chunk_dict, chunk_size, radius_in_chunks=1):
-		chunk_x = int(player_pos[0] // chunk_size)
-		chunk_y = int(player_pos[1] // chunk_size)
-		nearby_tiles = []
-		for dx in range(-radius_in_chunks, radius_in_chunks +1):
-			for dy in range(-radius_in_chunks, radius_in_chunks +1):
-				key = (chunk_x + dx, chunk_y + dy)
-				nearby_tiles.extend(chunk_dict.get(key, []))
-		return nearby_tiles
+	
 
 
 

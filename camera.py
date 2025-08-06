@@ -1,5 +1,6 @@
 import pygame
 from timer import Timer
+from chunking import get_nearby_tiles
 
 class CameraGroup(pygame.sprite.Group):
 	def __init__(self, groups:list):
