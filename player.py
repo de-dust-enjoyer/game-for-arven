@@ -4,7 +4,7 @@ from animation_player import AnimationPlayer
 from timer import Timer
 from dialog_box import DialogBox
 
-COLLISION_RADIUS = 100
+
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, starting_pos:pygame.math.Vector2, collision_group:pygame.sprite.Group, ui_group, kill_tiles, checkpoints:dict):
@@ -164,8 +164,7 @@ class Player(pygame.sprite.Sprite):
 		if direction == "horizontal":
 			self.is_on_left_wall = False
 			self.is_on_right_wall = False
-		
-		for sprite in self.get_nearby_sprites(self.collision_group, COLLISION_RADIUS):
+		for sprite in self.collision_group:
 			if self.collision_rect.colliderect(sprite.rect):
 				if direction == "vertical":
 					if self.collision_rect.bottom > sprite.rect.top and self.old_rect.bottom <= sprite.rect.top:
@@ -200,13 +199,6 @@ class Player(pygame.sprite.Sprite):
 		# update the position variable
 		self.rect.midbottom = self.collision_rect.midbottom
 		self.position = pygame.math.Vector2(self.collision_rect.topleft)
-
-
-
-	def get_nearby_sprites(self, group, radius):
-		return [sprite for sprite in group if
-   		abs(sprite.rect.centerx - self.collision_rect.centerx) < radius and 
-    	abs(sprite.rect.centery - self.collision_rect.centery) < radius]
 
 
 
