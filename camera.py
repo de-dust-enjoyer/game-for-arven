@@ -41,7 +41,7 @@ class CameraGroup(pygame.sprite.Group):
 		self.camera_rect.size = (visible_w, visible_h)
 
 		self.sprites_drawn = 0
-		if self.offset.y < 350:
+		if self.offset.y < 300:
 			self.camera_surf.fill("lightblue")
 		else:
 			self.camera_surf.fill((36,21,39))

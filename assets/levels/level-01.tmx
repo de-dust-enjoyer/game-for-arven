@@ -10,7 +10,6 @@
  <tileset firstgid="63" source="brick.tsx"/>
  <tileset firstgid="118" source="rock.tsx"/>
  <tileset firstgid="173" source="checkpoint.tsx"/>
- <tileset firstgid="174" source="checkpoint.tsx"/>
  <layer id="1" name="collision_tile" width="400" height="400">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -1628,7 +1627,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="player">
-  <object id="1" name="player" gid="1" x="152" y="296" width="8" height="8"/>
+  <object id="1" name="player" gid="1" x="840" y="278" width="8" height="8"/>
  </objectgroup>
  <objectgroup id="7" name="npc">
   <object id="4" name="luis" gid="60" x="444.667" y="291.667" width="8" height="12"/>
@@ -1638,8 +1637,8 @@
   <object id="8" name="checkpoint_1" type="checkpoint" x="880.333" y="1129.33" width="70" height="38"/>
   <object id="10" name="checkpoint_2" type="checkpoint" x="1549.66" y="915.166" width="67.3333" height="29.8333"/>
   <object id="11" name="checkpoint_3" type="checkpoint" x="1872" y="1200.22" width="48" height="23.4894"/>
-  <object id="12" name="checkpoint_2" type="flag" gid="174" x="1576" y="944" width="8" height="16"/>
-  <object id="13" name="checkpoint_3" type="flag" gid="174" x="1888" y="1224" width="8" height="16"/>
-  <object id="14" name="checkpoint_1" type="flag" gid="174" x="912" y="1168" width="8" height="16"/>
+  <object id="12" name="checkpoint_2" type="flag" gid="173" x="1576" y="944" width="8" height="16"/>
+  <object id="13" name="checkpoint_3" type="flag" gid="173" x="1888" y="1224" width="8" height="16"/>
+  <object id="14" name="checkpoint_1" type="flag" gid="173" x="912" y="1168" width="8" height="16"/>
  </objectgroup>
 </map>
