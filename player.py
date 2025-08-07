@@ -36,12 +36,14 @@ class Player(pygame.sprite.Sprite):
 		#movement vars:
 		self.speed:float = 1.5
 		self.max_velocity_y = 8
-		self.accelaration:float = 0.15
+		self.lerp_value:float = 0.15
+		self.lerp_floor:float = 0.1
+		self.lerp_air:float = 0.3
+		self.lerp_stop:float = 0.4
 		self.velocity:pygame.Vector2 = pygame.Vector2(0,0)
 		self.gravity:float = 0.008
 		self.jump_vel:float = 1.8
 		self.jump = False
-		self.has_jump = True
 		self.is_on_floor = False
 		self.is_on_left_wall = False
 		self.is_on_right_wall = False
@@ -52,6 +54,8 @@ class Player(pygame.sprite.Sprite):
 		self.wall_jump_left_timer = Timer(wall_jump_time, return_true_when_stopped = True)
 		self.wall_jump_right_timer = Timer(wall_jump_time, return_true_when_stopped = True)
 		self.jump_delay_timer = Timer(0.15, return_true_when_stopped = True)
+		kojote_time = 0.08
+		self.kojote_timer = Timer(kojote_time, return_true_when_stopped = True)
 		self.death_timer = Timer(3, return_true_when_stopped = False)
 
 		self.dead = False
@@ -72,6 +76,7 @@ class Player(pygame.sprite.Sprite):
 
 	def move(self):
 		if not self.dead:
+			self.lerp_value = self.lerp_floor if not self.is_on_floor else self.lerp_air
 			# update the timers
 			has_wall_jumped_left = self.wall_jump_left_timer.update()
 			has_wall_jumped_right = self.wall_jump_right_timer.update()
@@ -93,7 +98,8 @@ class Player(pygame.sprite.Sprite):
 				# horizontal movement:
 				nothing_pressed = True
 				if keys[pygame.K_a] and has_wall_jumped_left:
-					self.velocity.x = -1
+					target_vel_x = -1
+					self.velocity.x = pygame.math.lerp(self.velocity.x, target_vel_x, self.lerp_value)
 					self.flip_h = True
 					nothing_pressed = False
 					if not self.is_on_left_wall:
@@ -103,7 +109,8 @@ class Player(pygame.sprite.Sprite):
 
 
 				elif keys[pygame.K_d] and has_wall_jumped_right:
-					self.velocity.x = 1
+					target_vel_x = 1
+					self.velocity.x = pygame.math.lerp(self.velocity.x, target_vel_x, self.lerp_value)
 					self.flip_h = False
 					nothing_pressed = False
 					if not self.is_on_right_wall:
@@ -111,9 +118,10 @@ class Player(pygame.sprite.Sprite):
 					else:
 						self.animation_player.play("idle")
 				elif has_wall_jumped_left and has_wall_jumped_right or self.is_on_floor:
-					self.velocity.x = 0
+					self.velocity.x = pygame.math.lerp(self.velocity.x, 0, self.lerp_stop)
 
 				self.position.x += self.velocity.x * self.speed
+
 				self.collision_rect.left = self.position.x
 				self.handle_collisions("horizontal")
 
@@ -140,7 +148,7 @@ class Player(pygame.sprite.Sprite):
 				if self.jump:
 					self.jump = False
 					self.animation_player.play("jump")
-					if self.is_on_floor:
+					if self.is_on_floor or not self.kojote_timer.update():
 						self.velocity.y = -self.jump_vel
 						self.downforce = 0
 						self.jump_delay_timer.start()
@@ -178,7 +186,7 @@ class Player(pygame.sprite.Sprite):
 						self.is_on_floor = True
 						self.velocity.y = 0
 						self.downforce = 0
-						self.has_jump = True
+						self.kojote_timer.start(refresh=True)
 
 					elif self.collision_rect.top < sprite.collision_rect.bottom and self.old_rect.top >= sprite.collision_rect.bottom:
 						# player is on ceiling
@@ -204,9 +212,6 @@ class Player(pygame.sprite.Sprite):
 		# update the position variable
 		self.rect.midbottom = self.collision_rect.midbottom
 		self.position = pygame.math.Vector2(self.collision_rect.topleft)
-
-	
-
 
 
 

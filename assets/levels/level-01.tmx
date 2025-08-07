@@ -1627,7 +1627,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="player">
-  <object id="1" name="player" gid="1" x="840" y="278" width="8" height="8"/>
+  <object id="1" name="player" gid="1" x="657.303" y="284.268" width="8" height="8"/>
  </objectgroup>
  <objectgroup id="7" name="npc">
   <object id="4" name="luis" gid="60" x="444.667" y="291.667" width="8" height="12"/>

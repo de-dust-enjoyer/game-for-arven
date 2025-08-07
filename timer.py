@@ -12,10 +12,15 @@ class Timer:
 		if self.time_target != duration:
 			self.time_target = duration
 	
-	def start(self):
-		if not self.running:
+	def start(self, refresh:bool=False):
+		if not refresh:
+			if not self.running:
+				self.old_time = time.time()
+				self.running = True
+		else:
 			self.old_time = time.time()
 			self.running = True
+
 
 	def stop(self):
 		self.running = False
