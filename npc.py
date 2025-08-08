@@ -8,30 +8,37 @@ class NPC(Player):
 	def __init__(self, starting_pos, chunk_dict:dict, chunk_size:int, id:str, player:Player, camera_group:pygame.sprite.Group, ui_group: pygame.sprite.Group):
 		super().__init__(starting_pos, chunk_dict, chunk_size, ui_group, {})
 		self.id = id
+
 		animations:dict = {
 			"idle" : pygame.image.load(join("assets", "npc", self.id, "idle.png")).convert_alpha(),
-			"run" : pygame.image.load(join("assets", "npc", self.id, "run.png")).convert_alpha()
+			"run" : pygame.image.load(join("assets", "npc", self.id, "run.png")).convert_alpha(),
+			"finnish" : pygame.image.load(join("assets", "npc", self.id, "finnish.png")).convert_alpha()
 		}
+
 		tilesizes = {
 			"simon": (8,8),
-			"luis": (8,12)
+			"luis": (8,12),
+			"present": (9, 12)
 		}
-		self.animation_player = AnimationPlayer(animations, 5, tilesizes[self.id])
+		starting_animation = "idle"
+		
+		self.animation_player = AnimationPlayer(animations, 5, tilesizes[self.id], starting_animation, repeat=not self.id == "present") # sets repeat to false if present
 		dialog = {
 			"simon": ["lol"],
 			"luis": ["Oha!", "Ich hab nicht erwartet dich hier zu treffen.", "Wir haben ein kleines Problem!!!", "Aber erstmal,", 
 			"ALLES GUTE ZUM GEBURTSTAG", "und jetzt die schlechte Nachricht!!", "Simon wurde von den Einheimischen in den Tempel gelockt!",
 			"Sie meinten zu ihm er habe keine Chance gegen sie in Counter Strike", "Er ist ihnen schneller gefolgt als ich gucken konnte",
-			"ich habe ihn auf dem Weg verloren!!!", "gehe in den Tempel und finde ihn!!!"]
+			"ich habe ihn auf dem Weg verloren!!!", "gehe in den Tempel und finde ihn!!!"],
+			"present": ["Da ist es ja endlich"]
 		}
 		self.dialog = dialog[self.id]
-
+		self.animation = "idle"
 		self.ui_group = ui_group
 
 		self.player = player
 		self.camera_group = camera_group
 
-		self.animation = "idle"
+		
 		self.image = self.animation_player.update()
 		self.rect = self.image.get_frect()
 		self.collision_rect = self.rect.copy()
@@ -39,7 +46,7 @@ class NPC(Player):
 		self.collision_rect.midbottom = self.rect.midbottom
 		self.old_rect = self.collision_rect.copy() # for collision direction
 
-		self.interaction_box = pygame.Rect((self.rect.topleft), (60, 60))
+		self.interaction_box = pygame.Rect((self.rect.topleft), (50, 50))
 		self.interaction_box.center = self.collision_rect.center
 
 		self.target:pygame.Vector2 = None
@@ -51,6 +58,7 @@ class NPC(Player):
 	def update(self):
 		self.image = self.animation_player.update()
 		self.move()
+		
 		self.handle_interaction()
 
 	def move(self):

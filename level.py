@@ -82,11 +82,16 @@ class Level:
 
 
 					elif layer.name == "npc":
+						
 						npc = NPC((obj.x, obj.y), self.chunked_tiles, self.chunk_size, obj.name, player, self.camera_group, self.ui_group)
-						self.objects.add(npc)
 						if obj.name == "luis":
 							# self.camera_group.set_target(npc, player=True)
 							npc.goto(pygame.Vector2(player.collision_rect.center))
+						elif obj.name == "present":
+							npc = NPC((obj.x, obj.y), self.chunked_tiles, self.chunk_size, obj.name, player, self.camera_group, self.ui_group)
+
+							npc.look_at(npc)
+						self.objects.add(npc)
 							
 
 					elif layer.name == "checkpoints":

@@ -1,14 +1,15 @@
+
 import pygame
 from spritesheet import Spritesheet
 
 class AnimationPlayer:
-	def __init__(self, animations:dict = {}, animation_speed:int = 10, tilesize:tuple = (8,8)):
+	def __init__(self, animations:dict = {}, animation_speed:int = 10, tilesize:tuple = (8,8), starting_animation:str="idle", repeat:bool=True):
 		self.animations:dict = {}
 		for animation in animations:
 			self.animations[animation] = Spritesheet(animations[animation], tilesize[0], tilesize[1]).get_imgs_as_list()
-
+		self.repeat = repeat
 		self.playing = False
-		self.animation:str = "idle"
+		self.animation:str = starting_animation
 		self.index:int = 0
 		self.delta_time_target:float = 1 / animation_speed * 1000
 		self.old_time:float = pygame.time.get_ticks()
@@ -24,7 +25,10 @@ class AnimationPlayer:
 				self.old_time = pygame.time.get_ticks()
 		
 		if self.index >= len(self.animations[self.animation]): # if frame index higher than possible Frames then set to 0
-			self.index = 0
+			if self.repeat:
+				self.index = 0
+			else:
+				self.playing = False
 		return self.animations[self.animation][self.index] # returns the image for the animation
 
 
