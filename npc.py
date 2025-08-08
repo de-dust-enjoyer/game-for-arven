@@ -3,6 +3,8 @@ from animation_player import AnimationPlayer
 from player import Player
 from os.path import join
 from dialog_box import DialogBox
+from timer import Timer
+
 
 class NPC(Player):
 	def __init__(self, starting_pos, chunk_dict:dict, chunk_size:int, id:str, player:Player, camera_group:pygame.sprite.Group, ui_group: pygame.sprite.Group):
@@ -22,7 +24,7 @@ class NPC(Player):
 		}
 		starting_animation = "idle"
 		
-		self.animation_player = AnimationPlayer(animations, 5, tilesizes[self.id], starting_animation, repeat=not self.id == "present") # sets repeat to false if present
+		self.animation_player = AnimationPlayer(animations, 5, tilesizes[self.id], starting_animation, repeat=not self.id == "present", parent=self) # sets repeat to false if present
 		dialog = {
 			"simon": ["lol"],
 			"luis": ["Oha!", "Ich hab nicht erwartet dich hier zu treffen.", "Wir haben ein kleines Problem!!!", "Aber erstmal,", 
@@ -54,8 +56,11 @@ class NPC(Player):
 		self.speed = 0.5
 		self.allowed_to_move = True
 
+		self.game_won_timer = Timer(duration=1, repeat=False)
+
 
 	def update(self):
+
 		self.image = self.animation_player.update()
 		self.move()
 		
@@ -100,7 +105,7 @@ class NPC(Player):
 
 		if self.velocity.x:
 			self.animation_player.play("run")
-		else:
+		elif not self.velocity.x and not self.end_game:
 			self.animation_player.play("idle") 
 
 	def goto(self, pos:pygame.Vector2):
@@ -114,7 +119,10 @@ class NPC(Player):
 
 	def play_dialog(self):
 		if len(self.ui_group) == 0:
-			dialog_box = DialogBox(self.dialog, self.id, self)
+			if self.id != "present":
+				dialog_box = DialogBox(self.dialog, self.id, self)
+			else:
+				dialog_box = DialogBox(self.dialog, "Arwen", self)
 			self.ui_group.add(dialog_box)
 			dialog_box.start()
 
@@ -125,14 +133,49 @@ class NPC(Player):
 			self.player.stop()
 			self.stop()
 			self.camera_group.set_target(self)
+
 			self.play_dialog()
-			self.look_at(self.player)
+			if not self.id == "present":
+				self.look_at(self.player)
+			
 
 		elif len(self.dialog) == 0:
-
-			self.player.start()
+			if not self.end_game:
+				self.player.start()
 			
 			self.camera_group.remove_temp_target()
+
+
+
+	def last_scene(self):
+		self.end_game = True
+		self.position = pygame.Vector2(1824, 280)
+		
+		self.dialog = ["Na, dann wollen wir mal!"]
+		for group in self.groups():
+			for sprite in group:
+				if sprite.id == "luis":
+					sprite.end_game = True
+					sprite.position = pygame.Vector2(1808, 280)
+					sprite.look_at(self)
+					sprite.dialog = ["Joooo! Du hast es Geschafft"]
+
+				elif sprite.id == "simon":
+					sprite.end_game = True
+					sprite.position = pygame.Vector2(1816, 280)
+					sprite.look_at(self)
+					sprite.dialog = ["Zum Glück bist du heil zurückgekommen", "Ich dachte schon dein Geschenk wäre für immer verloren", 
+					"...", "es tut mir leid :( ...", "es war dumm es zu verwetten", "Aber ich war mir so sicher dass ich gewinne", "Aber Hey", 
+					"Wenigstens hast du es jetzt wieder", "komm schon öffne es du hast es dir jetzt aber wirklich verdient!"]
+				elif sprite.id == "player":
+					sprite.end_game = True
+					sprite.collision_rect.center = (1835, 290)
+					sprite.position = pygame.Vector2(sprite.collision_rect.center)
+					sprite.downforce = 0
+					sprite.velocity.y = 0
+
+
+
 
 
 

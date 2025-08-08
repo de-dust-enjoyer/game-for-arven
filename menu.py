@@ -11,7 +11,7 @@ class Menu:
 		self.button_group = pygame.sprite.Group()
 
 		self.start_button = Button("PLAY", (self.screen.get_width()/2, self.screen.get_height()/2), 
-				centered=True, method=self.game_state_manager.set_state, arg="level")
+				centered=True, method=self.game_state_manager.transition_state, arg="level")
 		self.button_group.add(self.start_button)
 
 		self.quit_button = Button("QUIT", (self.start_button.rect.centerx, self.start_button.rect.bottom + 100),
@@ -41,7 +41,6 @@ class Menu:
 
 		# game logic:
 		self.button_group.update(mouse_button_up_event)
-
 
 		# rendering:
 		self.screen.fill("lightblue")

@@ -8,6 +8,7 @@ from hair import Hair
 from npc import NPC
 from flag import Flag
 from trigger import Trigger
+from transition_screen import TransitionScreen
 
 class Level:
 	def __init__(self, screen, game_state_manager):
@@ -85,18 +86,17 @@ class Level:
 						
 						npc = NPC((obj.x, obj.y), self.chunked_tiles, self.chunk_size, obj.name, player, self.camera_group, self.ui_group)
 						if obj.name == "luis":
+							pass
 							# self.camera_group.set_target(npc, player=True)
-							npc.goto(pygame.Vector2(player.collision_rect.center))
+							#npc.goto(pygame.Vector2(player.collision_rect.center))
 						elif obj.name == "present":
-							npc = NPC((obj.x, obj.y), self.chunked_tiles, self.chunk_size, obj.name, player, self.camera_group, self.ui_group)
-
 							npc.look_at(npc)
 						self.objects.add(npc)
 							
 
 					elif layer.name == "checkpoints":
 						if obj.type == "checkpoint":
-							self.checkpoints[obj.name] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)	
+							self.checkpoints[obj.name] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
 						elif obj.type == "flag":
 							flag = Flag(self.checkpoints, obj.name, (obj.x, obj.y))
 							self.objects.add(flag)
@@ -126,6 +126,11 @@ class Level:
 		self.objects.update()
 		self.trigger_group.update()
 		self.ui_group.update()
+
+		for obj in self.objects:
+			if obj.id == "present":
+				if obj.game_won_timer.update():
+					transition_screen = TransitionScreen(self.game_state_manager.set_state, "end", self.ui_group, 2)
 
 		# rendering:
 		self.screen.fill("black")

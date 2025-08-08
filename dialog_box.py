@@ -1,6 +1,7 @@
 import pygame
 from os.path import join
 from timer import Timer
+from transition_screen import TransitionScreen
 
 class DialogBox(pygame.sprite.Sprite):
 	def __init__(self, dialog:list, name:str, control_parent):
@@ -84,8 +85,12 @@ class DialogBox(pygame.sprite.Sprite):
 
 		self.dialog_index += 1
 		if self.dialog_index >= len(self.dialog):
-			self.kill() #suii
+			if self.parent.id == "present" and not self.parent.end_game:
+				transition_screen = TransitionScreen(self.parent.last_scene, None, self.parent.ui_group, 2)
+			elif self.parent.id == "present" and self.parent.end_game:
+				self.parent.animation_player.play("run")
 			self.parent.dialog = []
+			self.kill() #suii
 			
 
 		else:

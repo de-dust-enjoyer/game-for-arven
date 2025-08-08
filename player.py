@@ -30,6 +30,8 @@ class Player(pygame.sprite.Sprite):
 		self.old_rect = self.collision_rect.copy() # for collision direction
 		self.position = pygame.math.Vector2(self.rect.topleft)
 
+		self.end_game = False
+
 		self.chunk_dict = chunk_dict
 		self.chunk_size = chunk_size
 
@@ -139,6 +141,7 @@ class Player(pygame.sprite.Sprite):
 			# gravity:
 			if not self.is_on_left_wall and not self.is_on_right_wall:
 				self.downforce += self.gravity
+
 			elif can_climb:
 				self.velocity.y = self.velocity.y * 0.7
 				self.downforce += self.gravity * 0.1
@@ -256,10 +259,13 @@ class Player(pygame.sprite.Sprite):
 
 		if updated_spawn_pos:
 			self.checkpoints.pop(updated_spawn_pos)
-			if updated_spawn_pos != "checkpoint_1":
-				dialog = DialogBox([random.choice(["Cool! ein Checkpoint.", "Checkpoint!", "Endlich am Checkpoint!"])], "Arwen", self)
-			else:
+			if updated_spawn_pos == "checkpoint_1":
 				dialog = DialogBox(["Wie lebe ich noch?", "das waren locker hundert Meter!"], "Arwen", self)
+			elif updated_spawn_pos == "checkpoint_6":
+				dialog = DialogBox(["Das sieht mir nach Schatzkammer aus!"], "Arwen", self)
+
+			else:
+				dialog = DialogBox([random.choice(["Cool! ein Checkpoint.", "Checkpoint!", "Endlich am Checkpoint!"])], "Arwen", self)
 			self.ui_group.add(dialog)
 			dialog.start()
 
