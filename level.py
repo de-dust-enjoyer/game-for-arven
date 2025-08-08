@@ -7,6 +7,7 @@ from camera import CameraGroup
 from hair import Hair
 from npc import NPC
 from flag import Flag
+from trigger import Trigger
 
 class Level:
 	def __init__(self, screen, game_state_manager):
@@ -28,6 +29,7 @@ class Level:
 		self.all_tiles = pygame.sprite.Group()
 		self.collision_tiles = pygame.sprite.Group()
 		self.kill_tiles = pygame.sprite.Group()
+		self.trigger_group = pygame.sprite.Group()
 		self.camera_group = CameraGroup([self.objects], self.chunked_tiles, self.chunk_size)
 		self.ui_group = pygame.sprite.Group()
 
@@ -92,8 +94,11 @@ class Level:
 							self.checkpoints[obj.name] = pygame.Rect(obj.x, obj.y, obj.width, obj.height)	
 						elif obj.type == "flag":
 							flag = Flag(self.checkpoints, obj.name, (obj.x, obj.y))
-							self.objects.add(flag)					
+							self.objects.add(flag)
 
+					elif layer.name == "triggers":
+						trigger = Trigger(obj.name, pygame.Rect(obj.x, obj.y, obj.width, obj.height),self.player, attribute="in_no_move_zone", set_true_if_inside=True)	
+						self.trigger_group.add(trigger)
 
 	def run(self):
 		# input loop
@@ -114,9 +119,13 @@ class Level:
 
 		# game logic:
 		self.objects.update()
+		self.trigger_group.update()
 		self.ui_group.update()
+
 		# rendering:
 		self.screen.fill("black")
 		self.camera_group.custom_draw()
 		self.ui_group.draw(self.screen)
+
+
 		

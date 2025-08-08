@@ -25,10 +25,6 @@ class CameraGroup(pygame.sprite.Group):
 
 		self.chunk_dict = chunk_dict
 		self.chunk_size = chunk_size
-
-
-		#optimizing
-		self.sprites_drawn = 0
 	
 
 	def custom_draw(self):
@@ -40,7 +36,6 @@ class CameraGroup(pygame.sprite.Group):
 		self.camera_rect.topleft = (self.offset.x , self.offset.y)
 		self.camera_rect.size = (visible_w, visible_h)
 
-		self.sprites_drawn = 0
 		if self.offset.y < 300:
 			self.camera_surf.fill("lightblue")
 		else:
@@ -52,7 +47,7 @@ class CameraGroup(pygame.sprite.Group):
 			sprite_pos = pygame.Vector2(sprite.rect.topleft)
 			adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
 			self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
-			self.sprites_drawn += 1
+
 
 		for group in self.groups:
 			for sprite in group:
@@ -60,7 +55,7 @@ class CameraGroup(pygame.sprite.Group):
 					sprite_pos = pygame.Vector2(sprite.rect.topleft)
 					adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
 					self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
-					self.sprites_drawn += 1
+
 
 		self.display_surf.blit(self.camera_surf, (0, 0))
 

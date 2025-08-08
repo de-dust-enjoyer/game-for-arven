@@ -35,7 +35,7 @@ class Player(pygame.sprite.Sprite):
 
 		#movement vars:
 		self.speed:float = 1.3
-		self.max_velocity_y = 8
+		self.max_velocity_y = 5
 		self.lerp_value:float = 0.15
 		self.lerp_floor:float = 0.1
 		self.lerp_air:float = 0.2
@@ -50,6 +50,7 @@ class Player(pygame.sprite.Sprite):
 		self.is_on_right_wall = False
 		self.flip_h = False
 		self.allowed_to_move = True
+		self.in_no_move_zone = False
 		wall_jump_time = 0.3
 		self.wall_jump_strength:float = 0.6
 		self.can_wall_jump_left_timer = Timer(wall_jump_time, return_true_when_stopped = True)
@@ -87,7 +88,7 @@ class Player(pygame.sprite.Sprite):
 			can_wall_jump_left = not self.can_wall_jump_left_timer.update()
 			can_wall_jump_right = not self.can_wall_jump_right_timer.update()
 			can_climb = self.jump_delay_timer.update()
-			if self.allowed_to_move:
+			if self.allowed_to_move and not self.in_no_move_zone:
 
 				self.old_rect = self.collision_rect.copy()
 
