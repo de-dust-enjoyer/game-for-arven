@@ -1637,7 +1637,7 @@
   <object id="29" name="disable_movement_3" type="trigger" x="1746" y="236.5" width="150.5" height="71.5"/>
  </objectgroup>
  <objectgroup id="7" name="npc">
-  <object id="4" name="luis" gid="60" x="231.667" y="226.667" width="8" height="12"/>
+  <object id="4" name="luis" gid="60" x="862.849" y="283.917" width="8" height="12"/>
   <object id="5" name="simon" gid="61" x="1497.03" y="1082.58" width="8" height="8"/>
   <object id="26" name="present" gid="229" x="1973.69" y="620.866" width="9" height="12"/>
  </objectgroup>
