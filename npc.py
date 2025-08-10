@@ -26,14 +26,20 @@ class NPC(Player):
 		
 		self.animation_player = AnimationPlayer(animations, 5, tilesizes[self.id], starting_animation, repeat=not self.id == "present", parent=self) # sets repeat to false if present
 		dialog = {
-			"simon": ["Oh", "Hi", "Was machst du denn hier?", "Arven hör zu ich hab Mist gebaut", "Du hattest ja Geburtstag", "und ich habe dir ein schönes Geschenk besorgt!",
+			"simon": 
+			["Oh", "Hi", "Was machst du denn hier?", "Arwen hör zu ich hab Mist gebaut", "Du hattest ja Geburtstag", "und ich habe dir ein schönes Geschenk besorgt . . . . .",
 			"Dann habe ich hier im Draussen einen Einheimischen getroffen", "Er meinte er würde mich im 1v1 besiegen", "Das konnte ich nicht auf mir sitzen lassen!",
-			"Ausserdem sah er aus als hätte er noch nie Counter Strike gespielt", "Er meinte aber er spielt nur mit Einsatz!"],
-			"luis": ["Oha!", "Ich hab nicht erwartet dich hier zu treffen.", "Wir haben ein kleines Problem!!!", "Aber erstmal,", 
+			"Ausserdem sah er aus als hätte er noch nie Counter Strike gespielt", "Er meinte aber er spielt nur mit Einsatz . . . .", "Und ich hatte nichts dabei", "Ausser deinem Geschenk . . . .",
+			". . . .", "Er hat mir einen ferrari peak gedrückt", "ich hatte keine Zeit zu reagieren und habe verloren", "Aber es besteht noch Hoffnung!", "Sie bewahren dein Geschenk in der Schatzkammer auf . . .",
+			"Der Weg ist nicht weit aber . . . ", "Zwischen dir und der Kammer liegen unzählige tödliche Fallen!", "Geh nun. Hol dir dein Geschenk wieder!", "Ich glaube an dich!"],
+			
+			"luis": 
+			["Oha!", "Ich hab nicht erwartet dich hier zu treffen.", "Wir haben ein kleines Problem!!!", "Aber erstmal,", 
 			"ALLES GUTE ZUM GEBURTSTAG", "und jetzt die schlechte Nachricht!!", "Simon wurde von den Einheimischen in den Tempel gelockt!",
 			"Sie meinten zu ihm er habe keine Chance gegen sie in Counter Strike", "Er ist ihnen schneller gefolgt als ich gucken konnte",
 			"ich habe ihn auf dem Weg verloren!!!", "gehe in den Tempel und finde ihn!!!"],
-			"present": ["Da ist es ja endlich"]
+			"present": 
+			["Da ist es ja endlich"]
 		}
 		self.dialog = dialog[self.id]
 		self.animation = "idle"
