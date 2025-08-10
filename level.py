@@ -87,7 +87,7 @@ class Level:
 						npc = NPC((obj.x, obj.y), self.chunked_tiles, self.chunk_size, obj.name, player, self.camera_group, self.ui_group)
 						if obj.name == "luis":
 							pass
-							# self.camera_group.set_target(npc, player=True)
+							#self.camera_group.set_target(npc, player=True)
 							#npc.goto(pygame.Vector2(player.collision_rect.center))
 						elif obj.name == "present":
 							npc.look_at(npc)
