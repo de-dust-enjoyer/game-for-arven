@@ -26,7 +26,9 @@ class NPC(Player):
 		
 		self.animation_player = AnimationPlayer(animations, 5, tilesizes[self.id], starting_animation, repeat=not self.id == "present", parent=self) # sets repeat to false if present
 		dialog = {
-			"simon": ["lol"],
+			"simon": ["Oh", "Hi", "Was machst du denn hier?", "Arven hör zu ich hab Mist gebaut", "Du hattest ja Geburtstag", "und ich habe dir ein schönes Geschenk besorgt!",
+			"Dann habe ich hier im Draussen einen Einheimischen getroffen", "Er meinte er würde mich im 1v1 besiegen", "Das konnte ich nicht auf mir sitzen lassen!",
+			"Ausserdem sah er aus als hätte er noch nie Counter Strike gespielt", "Er meinte aber er spielt nur mit Einsatz!"],
 			"luis": ["Oha!", "Ich hab nicht erwartet dich hier zu treffen.", "Wir haben ein kleines Problem!!!", "Aber erstmal,", 
 			"ALLES GUTE ZUM GEBURTSTAG", "und jetzt die schlechte Nachricht!!", "Simon wurde von den Einheimischen in den Tempel gelockt!",
 			"Sie meinten zu ihm er habe keine Chance gegen sie in Counter Strike", "Er ist ihnen schneller gefolgt als ich gucken konnte",
@@ -35,6 +37,7 @@ class NPC(Player):
 		}
 		self.dialog = dialog[self.id]
 		self.animation = "idle"
+		self.animation_player.play(self.animation)
 		self.ui_group = ui_group
 
 		self.player = player
@@ -67,32 +70,12 @@ class NPC(Player):
 		self.handle_interaction()
 
 	def move(self):
-		# set the target:
 
 		# general movement
-		if self.target and self.allowed_to_move:
-			self.velocity.x = self.target.x - pygame.Vector2(self.collision_rect.center).x
-			if self.velocity.length() > 1:
-				self.velocity = self.velocity.normalize()
-			self.position += self.velocity * self.speed
-			self.collision_rect.topleft = self.position
-		else:
-			self.velocity.x = 0
-			self.collision_rect.topleft = self.position
 
-		
+		self.collision_rect.topleft = self.position
+		self.rect.midbottom = self.collision_rect.midbottom
 
-		self.handle_collisions("horizontal")
-
-
-		# gravity
-		self.downforce += self.gravity
-		self.velocity.y += self.downforce
-		self.velocity.y = min(self.max_velocity_y, self.velocity.y)
-		self.position.y += self.velocity.y
-		self.collision_rect.top = self.position.y
-
-		self.handle_collisions("vertical")
 
 		# animation
 		if not self.look_target:
@@ -103,13 +86,6 @@ class NPC(Player):
 			else:
 				self.flip_h = True
 
-		if self.velocity.x:
-			self.animation_player.play("run")
-		elif not self.velocity.x and not self.end_game:
-			self.animation_player.play("idle") 
-
-	def goto(self, pos:pygame.Vector2):
-		self.target = pos
 
 	def look_at(self, target):
 		self.look_target = target

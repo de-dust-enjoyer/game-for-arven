@@ -6,11 +6,14 @@ from player import Player
 class CameraGroup(pygame.sprite.Group):
 	def __init__(self, groups:list, chunk_dict:dict, chunk_size:int):
 		super().__init__()
+		self.render_dist = 3 # chunks
+		self.fullscreen = False
 		self.display_surf = pygame.display.get_surface()
 		self.camera_surf = pygame.surface.Surface(self.display_surf.get_size(), pygame.SRCALPHA).convert_alpha()
 		self.camera_rect = self.camera_surf.get_rect()
 		self.groups = groups
-		self.zoom:int = 6
+		self.zoom:int = 10
+		
 		self.zoom_center = pygame.math.Vector2(self.display_surf.get_size()) / 2
 		self.offset:pygame.math.Vector2 = pygame.math.Vector2(100,250)
 
@@ -28,36 +31,36 @@ class CameraGroup(pygame.sprite.Group):
 	
 
 	def custom_draw(self):
+		zoom = self.zoom
 		self.box_movement()
 		# aduasts the rect to it fits the zoomed screen
-		visible_w = self.camera_surf.get_width() / self.zoom
-		visible_h = self.camera_surf.get_height() / self.zoom
+		visible_w = self.display_surf.get_width() / zoom
+		visible_h = self.display_surf.get_height() / zoom
 
 		self.camera_rect.topleft = (self.offset.x , self.offset.y)
 		self.camera_rect.size = (visible_w, visible_h)
 
 		if self.offset.y < 300:
-			self.camera_surf.fill("lightblue")
+			self.display_surf.fill("lightblue")
 		else:
-			self.camera_surf.fill((36,21,39))
+			self.display_surf.fill((27,28,34))
 		center_pos = self.camera_rect.center
-		nearby_tiles = get_nearby_tiles(center_pos, self.chunk_dict, self.chunk_size, 2)
+		nearby_tiles = get_nearby_tiles(center_pos, self.chunk_dict, self.chunk_size, self.render_dist)
 
 		for sprite in nearby_tiles:
 			sprite_pos = pygame.Vector2(sprite.rect.topleft)
-			adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
-			self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
+			adjusted_pos = ((sprite_pos - self.offset) * zoom)
+			self.display_surf.blit(sprite.scale_by(zoom), adjusted_pos)
 
 
 		for group in self.groups:
 			for sprite in group:
 				if not sprite.dead:
 					sprite_pos = pygame.Vector2(sprite.rect.topleft)
-					adjusted_pos = ((sprite_pos - self.offset) * self.zoom)
-					self.camera_surf.blit(sprite.scale_by(self.zoom), adjusted_pos)
+					adjusted_pos = ((sprite_pos - self.offset) * zoom)
+					self.display_surf.blit(sprite.scale_by(zoom), adjusted_pos)
 
 
-		self.display_surf.blit(self.camera_surf, (0, 0))
 
 
 	def box_movement(self):

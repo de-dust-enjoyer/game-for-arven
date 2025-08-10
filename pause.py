@@ -3,20 +3,20 @@ from button import Button
 from os.path import join
 
 
-class Menu:
+class Pause:
 	def __init__(self, screen, game_state_manager):
 		self.screen = screen
 		self.game_state_manager = game_state_manager
 		self.clicked = False
 
 		self.font = pygame.font.Font(join("assets", "font", "pixel_font.otf"), 128)
-		self.menu_text = self.font.render("Happy Birthday!", False, "white")
-		self.menu_text_rect = self.menu_text.get_rect(midtop=(self.screen.get_width() // 2, 80))
+		self.pause_text = self.font.render("paused", False, "white")
+		self.pause_text_rect = self.pause_text.get_rect(midtop=(self.screen.get_width() // 2, 80))
 
 		self.button_group = pygame.sprite.Group()
 
 		self.start_button = Button("PLAY", (self.screen.get_width()/2, self.screen.get_height()/2), 
-				centered=True, method=self.game_state_manager.transition_state, arg="level")
+				centered=True, method=self.game_state_manager.set_state, arg="level")
 		self.button_group.add(self.start_button)
 
 		self.quit_button = Button("QUIT", (self.start_button.rect.centerx, self.start_button.rect.bottom + 200),
@@ -29,17 +29,8 @@ class Menu:
 			if event.type == pygame.QUIT:
 				self.terminate()
 			elif event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_w or event.key == pygame.K_UP:
-					pass
-				if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-					pass
-				if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-					pass
-				if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-					pass
 				if event.key == pygame.K_ESCAPE:
-					pygame.quit()
-					sys.exit()
+					self.game_state_manager.set_state("level")
 
 			elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
 				mouse_button_up_event = event
@@ -50,7 +41,7 @@ class Menu:
 		# rendering:
 		self.screen.fill("lightblue")
 		self.button_group.draw(self.screen)
-		self.screen.blit(self.menu_text, self.menu_text_rect)
+		self.screen.blit(self.pause_text, self.pause_text_rect)
 
 	def terminate(self):
 		pygame.quit()

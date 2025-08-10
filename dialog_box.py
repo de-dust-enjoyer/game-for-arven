@@ -15,7 +15,7 @@ class DialogBox(pygame.sprite.Sprite):
 		self.typing_complete = False
 		self.waiting_for_input = False
 		
-		scale = 8
+		scale = 16
 		self.image = pygame.transform.scale_by(
 			pygame.image.load(join("assets", "ui", "dialog_box.png")).convert_alpha(), scale)
 		self.original_image = self.image.copy()
@@ -23,10 +23,10 @@ class DialogBox(pygame.sprite.Sprite):
 		self.rect.midtop = (pygame.display.get_surface().get_width() // 2, 80)
 		self.text_lines = []
 		
-		self.font = pygame.font.Font(join("assets", "font", "pixel_font.otf"), 14)
-		self.name_font = pygame.font.Font(join("assets", "font", "pixel_font.otf"), 14)
+		self.font = pygame.font.Font(join("assets", "font", "pixel_font.otf"), 28)
+		self.name_font = pygame.font.Font(join("assets", "font", "pixel_font.otf"), 28)
 		self.name_text = self.name_font.render(self.name, False, (20,130,20))
-		self.name_rect = self.name_text.get_rect(center = (self.rect.width // 2, 20))
+		self.name_rect = self.name_text.get_rect(center = (self.rect.width // 2, 40))
 		self.letter_timer = Timer(duration=0.02, repeat=True)
 		# load and scale ui img
 
@@ -53,7 +53,7 @@ class DialogBox(pygame.sprite.Sprite):
 	def render_text(self):
 		self.image = self.original_image.copy()
 		full_text = "".join(self.text_lines)
-		max_width = self.rect.width - 30 # padding
+		max_width = self.rect.width - 60 # padding
 
 		words = full_text.split(" ") # returns list with string split at " "
 		lines = []
@@ -70,11 +70,11 @@ class DialogBox(pygame.sprite.Sprite):
 		lines.append(current_line)
 
 		# rendering
-		y_offset = 30
+		y_offset = 60
 		self.image.blit(self.name_text, self.name_rect)
 		for line in lines:
 			text_surface = self.font.render(line, False, "white")
-			self.image.blit(text_surface, (15, y_offset))
+			self.image.blit(text_surface, (30, y_offset))
 			y_offset += self.font.get_height()
 
 

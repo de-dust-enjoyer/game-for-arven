@@ -4,7 +4,7 @@ from os.path import join
 class Button(pygame.sprite.Sprite):
 	def __init__(self, text:str, pos:tuple, centered:bool = False, method = None, arg = None):
 		super().__init__()
-		scale = 14
+		scale = 28
 		image_idle = pygame.transform.scale_by(pygame.image.load(join("assets", "ui", "button_idle.png")).convert_alpha(), scale)
 		image_pressed = pygame.transform.scale_by(pygame.image.load(join("assets", "ui", "button_pressed.png")).convert_alpha(), scale)
 		image_hover = pygame.transform.scale_by(pygame.image.load(join("assets", "ui", "button_hover.png")).convert_alpha(), scale)

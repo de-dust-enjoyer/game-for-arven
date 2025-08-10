@@ -22,7 +22,7 @@ class Level:
 		self.tilesize:tuple = (8,8)
 
 		# chunking
-		self.chunk_size = 64
+		self.chunk_size = 32
 		self.chunked_tiles = {} # {(chunk_x, chunk_y): [Tile, Tile, Tile ...]}
 
 		# groups:
@@ -46,19 +46,20 @@ class Level:
 		tmx_data = load_pygame(level_path)
 		for layer in tmx_data.visible_layers:
 			if isinstance(layer, pytmx.TiledTileLayer): # if layer is a tilelayer (not an object layer)
-				for x, y, gid in layer:
+				for x, y, gid, in layer:
 					tile_img = tmx_data.get_tile_image_by_gid(gid)
 					if not tile_img:
 						continue
 
 					pos = (x * self.tilesize[0], y * self.tilesize[1])
-					tile = Tile(pos, tile_img, layer.name)
+					tile = Tile(pos, tile_img, layer.name, None)
 
 					self.all_tiles.add(tile)
 					if layer.name == "collision_tile":
 						self.collision_tiles.add(tile)
 					elif layer.name == "kill_tile":
 						self.kill_tiles.add(tile)
+
 
 					# chunking
 
@@ -114,7 +115,7 @@ class Level:
 				
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
-					self.terminate() # crashes the game lol
+					self.game_state_manager.set_state("pause")
 				if event.key == pygame.K_SPACE:
 					self.player.jump = True
 					for obj in self.ui_group:

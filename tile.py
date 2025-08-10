@@ -1,12 +1,13 @@
 import pygame
 
 class Tile(pygame.sprite.Sprite):
-	def __init__(self, pos:tuple,image:pygame.surface.Surface, id):
+	def __init__(self, pos:tuple,image:pygame.surface.Surface, id, rotation):
 		super().__init__()
 		self.image = image
 		self.rect = self.image.get_frect(topleft = pos)
 		self.cache = {}
 		self.id = id
+		self.rotation = rotation
 		self.collision_rect = self.rect.copy()
 		if self.id == "kill_tile":
 			self.collision_rect.size = (self.rect.width - 2, self.rect.height // 2)
