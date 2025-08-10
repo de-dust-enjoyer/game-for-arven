@@ -131,12 +131,9 @@ class Level:
 		for obj in self.objects:
 			if obj.id == "present":
 				if obj.game_won_timer.update():
-					transition_screen = TransitionScreen(self.game_state_manager.set_state, "end", self.ui_group, 2)
+					obj.dialog = ["Es ist:", ". . . . . . . . .", "Ein Kino Gutschein!"]
 
 		# rendering:
 		self.screen.fill("black")
 		self.camera_group.custom_draw()
 		self.ui_group.draw(self.screen)
-
-
-		

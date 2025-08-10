@@ -7,10 +7,8 @@ class CameraGroup(pygame.sprite.Group):
 	def __init__(self, groups:list, chunk_dict:dict, chunk_size:int):
 		super().__init__()
 		self.render_dist = 3 # chunks
-		self.fullscreen = False
 		self.display_surf = pygame.display.get_surface()
-		self.camera_surf = pygame.surface.Surface(self.display_surf.get_size(), pygame.SRCALPHA).convert_alpha()
-		self.camera_rect = self.camera_surf.get_rect()
+		self.camera_rect = self.display_surf.get_rect()
 		self.groups = groups
 		self.zoom:int = 10
 		
@@ -43,7 +41,7 @@ class CameraGroup(pygame.sprite.Group):
 		if self.offset.y < 300:
 			self.display_surf.fill("lightblue")
 		else:
-			self.display_surf.fill((27,28,34))
+			self.display_surf.fill((27,28,40))
 		center_pos = self.camera_rect.center
 		nearby_tiles = get_nearby_tiles(center_pos, self.chunk_dict, self.chunk_size, self.render_dist)
 

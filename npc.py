@@ -131,20 +131,20 @@ class NPC(Player):
 
 	def last_scene(self):
 		self.end_game = True
-		self.position = pygame.Vector2(1824, 280)
+		self.position = pygame.Vector2(1824, 286)
 		
 		self.dialog = ["Na, dann wollen wir mal!"]
 		for group in self.groups():
 			for sprite in group:
 				if sprite.id == "luis":
 					sprite.end_game = True
-					sprite.position = pygame.Vector2(1808, 280)
+					sprite.position = pygame.Vector2(1808, 286)
 					sprite.look_at(self)
 					sprite.dialog = ["Joooo! Du hast es Geschafft"]
 
 				elif sprite.id == "simon":
 					sprite.end_game = True
-					sprite.position = pygame.Vector2(1816, 280)
+					sprite.position = pygame.Vector2(1816, 290)
 					sprite.look_at(self)
 					sprite.dialog = ["Zum Glück bist du heil zurückgekommen", "Ich dachte schon dein Geschenk wäre für immer verloren", 
 					"...", "es tut mir leid :( ...", "es war dumm es zu verwetten", "Aber ich war mir so sicher dass ich gewinne", "Aber Hey", 
