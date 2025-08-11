@@ -52,7 +52,8 @@ class Level:
 						continue
 
 					pos = (x * self.tilesize[0], y * self.tilesize[1])
-					tile = Tile(pos, tile_img, layer.name, None)
+					
+					tile = Tile(pos, tile_img, layer.name, gid)
 
 					self.all_tiles.add(tile)
 					if layer.name == "collision_tile":
