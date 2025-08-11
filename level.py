@@ -129,12 +129,9 @@ class Level:
 		self.trigger_group.update()
 		self.ui_group.update()
 
-		for obj in self.objects:
-			if obj.id == "present":
-				if obj.game_won_timer.update():
-					obj.dialog = ["Es ist:", ". . . . . . . . .", "Ein Kino Gutschein!"]
+		
 
 		# rendering:
-		self.screen.fill("black")
+		
 		self.camera_group.custom_draw()
 		self.ui_group.draw(self.screen)

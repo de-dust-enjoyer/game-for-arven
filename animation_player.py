@@ -14,28 +14,33 @@ class AnimationPlayer:
 		self.old_time:float = pygame.time.get_ticks()
 		self.current_time:float = pygame.time.get_ticks()
 		self.parent = parent
+		self.locked = False
+		self.perm_animation = "finnish"
 
 
 	def update(self): # this runs framerate independent!!! (WOOOOW i love it!!!)
-		if self.playing:
-			self.current_time = pygame.time.get_ticks()
-			# if enough time has passed the next frame is called
-			if self.current_time - self.old_time >= self.delta_time_target:
-				self.index += 1 # increments the frame index
-				self.old_time = pygame.time.get_ticks()
-		
-		if self.index >= len(self.animations[self.animation]): # if frame index higher than possible Frames then set to 0
-			if self.repeat:
-				self.index = 0
-			elif not self.repeat and self.animation == "run":
-				self.playing = False
-				self.index = len(self.animations[self.animation]) - 1
-				self.parent.game_won_timer.start()
-			else:
-				self.playing = False
-				self.index = len(self.animations[self.animation]) - 1
+		if not self.locked:
+			if self.playing:
+				self.current_time = pygame.time.get_ticks()
+				# if enough time has passed the next frame is called
+				if self.current_time - self.old_time >= self.delta_time_target:
+					self.index += 1 # increments the frame index
+					self.old_time = pygame.time.get_ticks()
+			
+			if self.index >= len(self.animations[self.animation]): # if frame index higher than possible Frames then set to 0
+				if self.repeat:
+					self.index = 0
+				elif not self.repeat and self.animation == "run":
+					self.set_animation_perm("finnish")
+					self.parent.dialog = [". . . . . . . ", "Es ist ein . . . . ", "Gutschein", ". . . . .", "Ein Kino Gutschein!"]
+				else:
+					self.playing = False
+					self.index = len(self.animations[self.animation]) - 1
 
-		return self.animations[self.animation][self.index] # returns the image for the animation
+			return self.animations[self.animation][self.index] # returns the image for the animation
+		else:
+			return self.animations[self.perm_animation][0]
+
 
 
 	def play(self, animation:str = None):
@@ -50,3 +55,11 @@ class AnimationPlayer:
 	def stop(self):
 		self.playing = False
 		self.index = 0
+
+
+	def set_animation_perm(self, animation):
+		self.old_time = pygame.time.get_ticks()
+		self.index = 0
+		self.playing = True
+		self.animation = animation
+		self.locked = True

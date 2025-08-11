@@ -22,8 +22,6 @@ class Tile(pygame.sprite.Sprite):
 			self.collision_rect.size = (self.rect.width - 2, self.rect.height // 2)
 			self.collision_rect.midtop = self.rect.midtop
 
-		
-
 
 	def scale_by(self, scale:float):
 		if not scale in self.cache:
