@@ -129,6 +129,13 @@ class Level:
 		self.trigger_group.update()
 		self.ui_group.update()
 
+		for obj in self.objects:
+			if obj.id == "present":
+				if obj.done:
+
+					self.game_state_manager.set_state("credits")
+
+
 		
 
 		# rendering:

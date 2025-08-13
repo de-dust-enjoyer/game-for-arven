@@ -7,7 +7,8 @@ class GameStateManager:
 		self.ui_group = ui_group
 
 	def transition_state(self, new_state):
-		transition_screen = TransitionScreen(self.set_state, new_state, self.ui_group)
+		if new_state != self.current_state:
+			transition_screen = TransitionScreen(self.set_state, new_state, self.ui_group)
 
 	def get_state(self):
 		return self.current_state

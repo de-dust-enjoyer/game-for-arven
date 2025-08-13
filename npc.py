@@ -65,7 +65,10 @@ class NPC(Player):
 		self.speed = 0.5
 		self.allowed_to_move = True
 
-		self.game_won_timer = Timer(duration=1, repeat=False)
+		self.play_credits = False
+		self.done = False
+
+
 
 
 	def update(self):

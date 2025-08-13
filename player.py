@@ -263,6 +263,8 @@ class Player(pygame.sprite.Sprite):
 				dialog = DialogBox(["Wie lebe ich noch?", "das waren locker hundert Meter!"], "Arwen", self)
 			elif updated_spawn_pos == "checkpoint_6":
 				dialog = DialogBox(["Das sieht mir nach Schatzkammer aus!"], "Arwen", self)
+			elif updated_spawn_pos == "checkpoint_5":
+				dialog = DialogBox(["Das meinte Simon also mit Fallen"], "Arwen", self)
 
 			else:
 				dialog = DialogBox([random.choice(["Cool! ein Checkpoint.", "Checkpoint!", "Endlich am Checkpoint!"])], "Arwen", self)

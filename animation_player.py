@@ -33,6 +33,8 @@ class AnimationPlayer:
 				elif not self.repeat and self.animation == "run":
 					self.set_animation_perm("finnish")
 					self.parent.dialog = [". . . . . . . ", "Es ist ein . . . . ", "Gutschein", ". . . . .", "Ein Kino Gutschein!"]
+					self.parent.play_credits = True
+					
 				else:
 					self.playing = False
 					self.index = len(self.animations[self.animation]) - 1

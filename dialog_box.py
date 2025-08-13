@@ -87,8 +87,10 @@ class DialogBox(pygame.sprite.Sprite):
 		if self.dialog_index >= len(self.dialog):
 			if self.parent.id == "present" and not self.parent.end_game:
 				transition_screen = TransitionScreen(self.parent.last_scene, None, self.parent.ui_group, 2)
-			elif self.parent.id == "present" and self.parent.end_game:
+			elif self.parent.id == "present" and self.parent.end_game and not self.parent.play_credits:
 				self.parent.animation_player.play("run")
+			elif self.parent.id == "present" and self.parent.play_credits:
+				self.parent.done = True
 			self.parent.dialog = []
 			self.kill() #suii
 			

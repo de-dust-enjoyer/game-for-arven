@@ -3,9 +3,9 @@ from game_state_manager import GameStateManager
 from level import Level
 from menu import Menu
 from pause import Pause
-from end import End
+from credits import Credits
 from nothing import Nothing
-from debugInfo import DebugInfo
+
 
 class Game:
 	def __init__(self):
@@ -23,26 +23,25 @@ class Game:
 		self.menu = Menu(self.screen, self.game_state_manager)
 		self.level = Level(self.screen, self.game_state_manager)
 		self.pause = Pause(self.screen, self.game_state_manager)
-		self.end = End(self.screen, self.game_state_manager)
+		self.credits = Credits(self.screen, self.game_state_manager)
 		self.nothing = Nothing(self.screen, self.game_state_manager)
 
-		self.states = {"level": self.level, "menu": self.menu, "pause": self.pause, "end": self.end, "nothing": self.nothing}
+		self.states = {"level": self.level, "menu": self.menu, "pause": self.pause, "credits": self.credits, "nothing": self.nothing}
 
-		self.debug_info = DebugInfo(pygame.font.Font("assets/font/pixel_font.otf", 10))
+
 						
 
 
 	def run(self):
 		self.game_state_manager.transition_state("menu")
 		while True:
+			#print(self.game_state_manager.get_state())
 			self.clock.tick(self.fps)
 
 			self.states[self.game_state_manager.get_state()].run()
-			self.debug_info.add("fps: " ,self.clock.get_fps())
 
 			self.transition_group.update()
 
-			self.debug_info.render(self.screen)
 			self.transition_group.draw(self.screen)
 			
 
